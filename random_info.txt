@@ -1,0 +1,30 @@
+    pos1_x = 0.636
+    pos1_y = 0.053
+    pos1_z = 0.134
+    pos1_qx = 0.748
+    pos1_qy = -0.655
+    pos1_qz = -0.018
+    pos1_qw = -0.105
+    pos1_x = 0.636
+
+    pos2_x = 0.623 
+    pos2_y = 0.053
+    pos2_z = 0.042
+    pos2_qx = 0.758
+    pos2_qy = 0.646
+    pos2_qz = 0.090
+    pos2_qw = -0.011
+
+
+
+Fingers open:
+[-0.25 0.25 0.25]
+
+Fingers half open:
+[23.75 23.75 23.75]
+
+Fingers mostly closed:
+[35.25 36.25 36.25]
+
+Fingers closed:
+[57.75 57.75 59.75]

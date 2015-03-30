@@ -9,6 +9,8 @@ install(DIRECTORY launch DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 install(FILES
    urdf/standalone_arm.xacro
    urdf/jaco_arm.xacro
+   urdf/new_model.urdf.xacro
+   urdf/table_model.urdf.xacro
    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/urdf
  )
 install(DIRECTORY meshes
