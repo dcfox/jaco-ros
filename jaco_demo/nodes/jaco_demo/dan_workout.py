@@ -61,26 +61,30 @@ if __name__ == '__main__':
     try:
         rospy.init_node('jaco' + '_dan_workout')
 
+	#Cartesian points chosen from file aboveTable.txt
         print('Using poses from file: home/dan/catkin_ws/src/jaco-ros/aboveTable.txt')
         poses = goal_generators.poses_from_file('/home/dan/catkin_ws/src/jaco-ros/aboveTable.txt')
 
-	"Move above the table"
+	#Move above the table
         for pos, orient in poses:
             print('    position: {},  orientation: {}'.format(pos, orient))
             result = cartesian_pose_client(pos, orient)
 
+	#Finger positions by angle (0 to ~60)
         print('Using the specified JACO finger positions:')
         raw_positions = [47.75, 47.75, 47.75]
 	positions = [ raw_positions ]
 
-	"Close the fingers"
+	#Close the fingers
         for position in positions:
             print('    position: {}'.format(position))
             result = gripper_client(position)
 
+	#Cartesian points chosen from file homePos.txt
         print('Using poses from file: home/dan/catkin_ws/src/jaco-ros/homePos.txt')
         poses = goal_generators.poses_from_file('/home/dan/catkin_ws/src/jaco-ros/homePos.txt')
 
+	#Move to home
 	"Move above the table"
         for pos, orient in poses:
             print('    position: {},  orientation: {}'.format(pos, orient))

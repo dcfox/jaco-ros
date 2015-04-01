@@ -37,7 +37,7 @@ class JacoAPI
 
     int (*getGeneralInformations)(GeneralInformations &);
     int (*getQuickStatus)(QuickStatus &);
-    // int (*GetForcesInfo)(ForcesInfo &);
+    int (*getForcesInfo)(ForcesInfo &);
 
     int (*getCodeVersion)(std::vector<int> &);
     int (*startControlAPI)();
@@ -71,6 +71,7 @@ class JacoAPI
     int (*eraseAllTrajectories)();
     int (*getPositionCurrentActuators)(std::vector<float> &);
     int (*setActuatorPID)(unsigned int, float, float, float);
+    int (*getAngularForceGravityFree)(AngularPosition &);
 };
 
 }  // namespace jaco

@@ -259,6 +259,56 @@ void JacoComm::initFingers(void)
     return;
 }
 
+void JacoComm::initTrajectory(void)
+{
+    boost::recursive_mutex::scoped_lock lock(api_mutex_);
+
+    int result = ERROR_NOT_INITIALIZED;
+
+    if (isStopped())
+    {
+        ROS_INFO("The trajectory init is aborted because the arm is stopped");
+        throw JacoCommException("The trajectory init is aborted because the arm is stopped", result);
+    }
+
+    result = jaco_api_.eraseAllTrajectories();
+    if (result != NO_ERROR_KINOVA)
+    {
+        throw JacoCommException("Could empty trajectories inside the robotical arm's FIFO", result);
+    }
+
+    startAPI();
+
+    result = jaco_api_.setAngularControl();
+    if (result != NO_ERROR_KINOVA)
+    {
+        throw JacoCommException("Could not set angular control", result);
+    }
+}
+
+void JacoComm::addTrajectoryPoint(const TrajectoryPoint &point)
+{
+    boost::recursive_mutex::scoped_lock lock(api_mutex_);
+
+    int result = NO_ERROR_KINOVA;
+
+    result = jaco_api_.sendBasicTrajectory(point);
+    if (result != NO_ERROR_KINOVA)
+    {
+        throw JacoCommException("Could not add point to the trajectory", result);
+    }
+}
+
+void JacoComm::getActualTrajectoryInfo(TrajectoryPoint& currentPoint)
+{
+    boost::recursive_mutex::scoped_lock lock(api_mutex_);
+
+    int result = jaco_api_.getActualTrajectoryInfo(currentPoint);
+    if (result != NO_ERROR_KINOVA)
+    {
+        throw JacoCommException("Could not get current trajectory position", result);
+    }
+}
 
 /*!
  * \brief Sends a joint angle command to the Jaco arm.
@@ -397,7 +447,7 @@ void JacoComm::setFingerPositions(const FingerAngles &fingers, int timeout, bool
 
     //startAPI();
 
-    result = jaco_api_.setAngularControl();
+    result = jaco_api_.setCartesianControl();
     if (result != NO_ERROR_KINOVA)
     {
         throw JacoCommException("Could not set Cartesian control", result);
@@ -405,22 +455,15 @@ void JacoComm::setFingerPositions(const FingerAngles &fingers, int timeout, bool
 
     // Initialize Cartesian control of the fingers
     jaco_position.Position.HandMode = POSITION_MODE;
-    jaco_position.Position.Type = ANGULAR_POSITION;
+    jaco_position.Position.Type = CARTESIAN_POSITION;
     jaco_position.Position.Fingers = fingers;
     jaco_position.Position.Delay = 0.0;
     jaco_position.LimitationsActive = 0;
 
-    AngularPosition jaco_angles;
-    memset(&jaco_angles, 0, sizeof(jaco_angles));  // zero structure
-
-    result = jaco_api_.getAngularPosition(jaco_angles);
-    if (result != NO_ERROR_KINOVA)
-    {
-        throw JacoCommException("Could not get the angular position", result);
-    }
-
-
-    jaco_position.Position.Actuators = jaco_angles.Actuators;
+    // These values will not be used but are initialized anyway.
+    JacoAngles angles;
+    getJointAngles(angles);
+    jaco_position.Position.Actuators = angles;
 
     // When loading a cartesian position for the fingers, values are required for the arm joints
     // as well or the arm goes nuts.  Grab the current position and feed it back to the arm.
@@ -517,6 +560,24 @@ void JacoComm::setConfig(const ClientConfigurations &config)
     }
 }
 
+/*!
+ * \brief Sends a native joystick command to the arm.
+ *
+ * The command simulates the native Kinova Jaco 3-axis joystick's output.
+ */
+void JacoComm::sendJoystickCommand(const JoystickCommand &command)
+{
+    boost::recursive_mutex::scoped_lock lock(api_mutex_);
+
+    startAPI();
+
+    int result = jaco_api_.sendJoystickCommand(command);
+    if (result != NO_ERROR_KINOVA)
+    {
+        throw JacoCommException("Could not send joystick command", result);
+    }
+}
+
 
 /*!
  * \brief API call to obtain the current angular position of all the joints.
@@ -534,6 +595,59 @@ void JacoComm::getJointAngles(JacoAngles &angles)
     }
 
     angles = JacoAngles(jaco_angles.Actuators);
+}
+
+/*!
+ * \brief API call to obtain the angular gravity free forces.
+ */
+
+void JacoComm::getForceAngularGravityFree(JacoAngles &forces)
+{
+    boost::recursive_mutex::scoped_lock lock(api_mutex_);
+    AngularPosition jaco_angles;
+    memset(&jaco_angles, 0, sizeof(jaco_angles));  // zero structure
+
+    int result = jaco_api_.getAngularForceGravityFree(jaco_angles);
+    if (result != NO_ERROR_KINOVA)
+    {
+        throw JacoCommException("Could not get the force", result);
+    }
+    forces.Actuator1 = jaco_angles.Actuators.Actuator1;
+    forces.Actuator2 = jaco_angles.Actuators.Actuator2;
+    forces.Actuator3 = jaco_angles.Actuators.Actuator3;
+    forces.Actuator4 = jaco_angles.Actuators.Actuator4;
+    forces.Actuator5 = jaco_angles.Actuators.Actuator5;
+    forces.Actuator6 = jaco_angles.Actuators.Actuator6;
+}
+
+/*!
+ * \brief API call to obtain the cartesian forces.
+ */
+
+void JacoComm::getForceCartesian(JacoPose &force)
+{
+    boost::recursive_mutex::scoped_lock lock(api_mutex_);
+    CartesianPosition jaco_cartesian_force;
+    memset(&jaco_cartesian_force, 0, sizeof(jaco_cartesian_force));  // zero structure
+
+    int result = jaco_api_.getCartesianForce(jaco_cartesian_force);
+    if (result != NO_ERROR_KINOVA)
+    {
+        throw JacoCommException("Could not get the Cartesian Force", result);
+    }
+    force = JacoPose(jaco_cartesian_force.Coordinates);
+}
+
+void JacoComm::getForcesInfo(ForcesInfo &forces_info)
+{
+    boost::recursive_mutex::scoped_lock lock(api_mutex_);
+    memset(&forces_info, 0, sizeof(forces_info));  // zero structure
+
+    int result = jaco_api_.getForcesInfo(forces_info);
+    if (result != NO_ERROR_KINOVA)
+    {
+        throw JacoCommException("Could not get the forces info", result);
+    }
 }
 
 /*!

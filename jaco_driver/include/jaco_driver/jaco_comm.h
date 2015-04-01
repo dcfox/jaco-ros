@@ -68,12 +68,16 @@ class JacoComm
     bool isHomed(void);
     void homeArm(void);
     void initFingers(void);
+    void initTrajectory(void);
+    void addTrajectoryPoint(const TrajectoryPoint &point);
+    void getActualTrajectoryInfo(TrajectoryPoint& currentPoint);
     void setJointAngles(const JacoAngles &angles, int timeout = 0, bool push = true);
     void setCartesianPosition(const JacoPose &position, int timeout = 0, bool push = true);
     void setFingerPositions(const FingerAngles &fingers, int timeout = 0, bool push = true);
     void setJointVelocities(const AngularInfo& joint_vel);
     void setCartesianVelocities(const CartesianInfo &velocities);
     void setConfig(const ClientConfigurations &config);
+    void sendJoystickCommand(const JoystickCommand &command);
     void getJointAngles(JacoAngles &angles);
     void getJointVelocities(JacoAngles &vels);
     void getJointTorques(JacoAngles &tqs);
@@ -86,6 +90,9 @@ class JacoComm
     void stopForceControl();
     void getQuickStatus(QuickStatus &quick_status);
     void getConfig(ClientConfigurations &config);
+    void getForceAngularGravityFree(JacoAngles &angles);
+    void getForceCartesian(JacoPose &position);
+    void getForcesInfo(ForcesInfo &forces_info);
     void printAngles(const JacoAngles &angles);
     void printPosition(const JacoPose &position);
     void printFingers(const FingersPosition &fingers);
