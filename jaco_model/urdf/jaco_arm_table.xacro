@@ -34,8 +34,8 @@
   <property name="api_origin" value="jaco_api_origin" />
 
   <property name="joint_base" value="jaco_joint_base" />
-  <property name="joint_base_axis_xyz" value="0 0 0" />
-  <property name="joint_base_origin_xyz" value="0 0 0" />
+  <property name="joint_base_axis_xyz" value="0 0 0.88265" />
+  <property name="joint_base_origin_xyz" value="0 0 0.88265" />
   <property name="joint_base_origin_rpy" value="0 0 0" />
 
   <property name="joint_1" value="jaco_joint_1" />
@@ -116,6 +116,46 @@
     <xacro:jaco_link link_name="${link_finger_3}"/>
     <xacro:jaco_finger_joint joint_name="${joint_finger_3}" type="revolute" parent="${link_hand}" child="${link_finger_3}" joint_axis_xyz="${joint_finger_3_axis_xyz}" joint_origin_xyz="${joint_finger_3_origin_xyz}" joint_origin_rpy="${joint_finger_3_origin_rpy}" lower_limit="${joint_finger_3_lower_limit}" upper_limit="${joint_finger_3_upper_limit}"/>
   </xacro:macro>
-
+  <joint name="jointarmtoholder" type="fixed">
+    <parent link="${link_base}"/>
+    <child link="holder"/>
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+ <link name="holder">
+    <visual>
+      <geometry>
+        <box size="0.04445 0.04445 0.14605"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0 0 -0.073025"/>
+      <material name="metal">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.53 0.52 0.1"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0 0 0.1"/>
+    </collision>
+    <inertial>
+      <mass value="150"/>
+      <inertia ixx="0.4" iyy="0.4" izz="0.2" ixy="0.0" ixz="0.0" iyz="0.0"/>
+    </inertial>
+  </link>
+  <link name="table">
+    <visual>
+      <geometry>
+        <box size="1.3716 0.796925 0.7366"/>
+      </geometry>
+      <material name="table_mat">
+        <color rgba="0.5 0.5 0.25 1"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="holder_to_table" type="fixed">
+    <parent link="holder"/>
+    <child link="table"/>
+    <origin xyz="0.663575 0.3762375 -0.51435"/>
+  </joint>
 
 </root>

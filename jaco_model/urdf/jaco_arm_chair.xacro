@@ -35,7 +35,7 @@
 
   <property name="joint_base" value="jaco_joint_base" />
   <property name="joint_base_axis_xyz" value="0 0 0" />
-  <property name="joint_base_origin_xyz" value="0 0 0" />
+  <property name="joint_base_origin_xyz" value="0.15 0 0.55" />
   <property name="joint_base_origin_rpy" value="0 0 0" />
 
   <property name="joint_1" value="jaco_joint_1" />
@@ -116,6 +116,176 @@
     <xacro:jaco_link link_name="${link_finger_3}"/>
     <xacro:jaco_finger_joint joint_name="${joint_finger_3}" type="revolute" parent="${link_hand}" child="${link_finger_3}" joint_axis_xyz="${joint_finger_3_axis_xyz}" joint_origin_xyz="${joint_finger_3_origin_xyz}" joint_origin_rpy="${joint_finger_3_origin_rpy}" lower_limit="${joint_finger_3_lower_limit}" upper_limit="${joint_finger_3_upper_limit}"/>
   </xacro:macro>
-
+  <joint name="jointarmtochair" type="fixed">
+    <parent link="root"/>
+    <child link="base_link"/>
+    <origin xyz="0 0.4 0.5" rpy="0 0 0" />
+  </joint>
+<link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.53 0.52 0.1"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0 0 0.1"/>
+      <material name="leather">
+        <color rgba="0.5 0.5 0.5 1"/>
+        <!--texture filename="package://jaco_description/urdf/leather.jpg" /-->
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.53 0.52 0.1"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0 0 0.1"/>
+    </collision>
+    <inertial>
+      <mass value="150"/>
+      <inertia ixx="0.4" iyy="0.4" izz="0.2" ixy="0.0" ixz="0.0" iyz="0.0"/>
+    </inertial>
+  </link>
+  <link name="back">
+    <visual>
+      <geometry>
+        <box size="0.1 0.43 0.52"/>
+      </geometry>
+      <!--origin rpy="0 0 0" xyz="-0.5 0 0.3"/-->
+      <material name="leather"/>
+    </visual>
+  </link>
+  <joint name="base_link_to_back" type="fixed">
+    <parent link="base_link"/>
+    <child link="back"/>
+    <origin xyz="-0.28 0 0.375"/>
+  </joint>
+   <link name="back_head">
+    <visual>
+      <geometry>
+        <box size="0.1 0.23 0.18"/>
+      </geometry>
+      <!--origin rpy="0 0 0" xyz="-0.5 0 0.3"/-->
+      <material name="leather"/>
+    </visual>
+  </link>
+  <joint name="base_link_to_back_head" type="fixed">
+    <parent link="base_link"/>
+    <child link="back_head"/>
+    <origin xyz="-0.28 0 0.7"/>
+  </joint>
+ <!--arm rests-->
+  <link name="arm_rest_right">
+    <visual>
+      <geometry>
+        <box size="0.41 0.07 0.05"/>
+      </geometry>
+      <!--origin rpy="0 0 0" xyz="-0.5 0 0.3"/-->
+      <material name="leather"/>
+    </visual>
+  </link>
+  <joint name="base_link_to_arm_rest_right" type="fixed">
+    <parent link="base_link"/>
+    <child link="arm_rest_right"/>
+    <origin xyz="-0.06 0.24 0.25"/>
+  </joint>
+ <link name="arm_rest_left">
+    <visual>
+      <geometry>
+        <box size="0.41 0.07 0.05"/>
+      </geometry>
+      <!--origin rpy="0 0 0" xyz="-0.5 0 0.3"/-->
+      <material name="leather"/>
+    </visual>
+  </link>
+  <joint name="base_link_to_arm_rest_left" type="fixed">
+    <parent link="base_link"/>
+    <child link="arm_rest_left"/>
+    <origin xyz="-0.06 -0.24 0.25"/>
+  </joint>
+  <!-- main driving wheels -->
+  <link name="left_wheel">
+    <visual>
+      <geometry>
+        <cylinder length="0.09" radius="0.125"/>
+      </geometry>
+      <origin rpy="1.57075 0 0" xyz="0.0 0.0 0.0"/>
+      <material name="wheel">
+        <color rgba="0.0 0.0 0.9 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.06" radius="0.12"/>
+      </geometry>
+      <origin rpy="1.57075 0 0" xyz="0.0 0.0 0.0"/>
+    </collision>
+  </link>
+  <joint name="base_link_to_left_wheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_wheel"/>
+    <origin xyz="0.05 0.3 -0.3"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+  <link name="right_wheel">
+    <visual>
+      <geometry>
+        <cylinder length="0.09" radius="0.125"/>
+      </geometry>
+      <origin rpy="1.57075 0 0" xyz="0.0 0.0 0.0"/>
+      <material name="wheel"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.06" radius="0.12"/>
+      </geometry>
+      <origin rpy="1.57075 0 0" xyz="0.0 0.0 0.0"/>
+    </collision>
+  </link>
+  <joint name="base_link_to_right_wheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_wheel"/>
+    <origin xyz="0.05 -0.3 -0.3"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+ <link name="motor_cage">
+    <visual>
+      <geometry>
+        <box size="0.48 0.34 0.25"/>
+      </geometry>
+      <!--origin rpy="0 0 0" xyz="-0.5 0 0.3"/-->
+      <material name="leather"/>
+    </visual>
+  </link>
+  <joint name="base_link_to_motor_cage" type="fixed">
+    <parent link="base_link"/>
+    <child link="motor_cage"/>
+    <origin xyz="0 0 -0.2"/>
+  </joint>
+ <link name="under_seat">
+    <visual>
+      <geometry>
+        <box size="0.38 0.32 0.04"/>
+      </geometry>
+      <!--origin rpy="0 0 0" xyz="-0.5 0 0.3"/-->
+      <material name="leather"/>
+    </visual>
+  </link>
+  <joint name="base_link_to_under_seat" type="fixed">
+    <parent link="base_link"/>
+    <child link="under_seat"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+  <link name="foot_plate">
+    <visual>
+      <geometry>
+        <box size="0.44 0.38 0.05"/>
+      </geometry>
+      <!--origin rpy="0 0 0" xyz="-0.5 0 0.3"/-->
+      <material name="leather"/>
+    </visual>
+  </link>
+  <joint name="base_link_to_foot_plate" type="fixed">
+    <parent link="base_link"/>
+    <child link="foot_plate"/>
+    <origin xyz="0.47 0 -0.3"/>
+  </joint>
 
 </root>

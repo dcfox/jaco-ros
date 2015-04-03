@@ -1,0 +1,5 @@
+<launch>
+   <arg name="robot" default="jaco"/>
+   <node name="dan_workout" pkg="jaco_demo" type="dan_workout.py">
+   </node>
+</launch>
