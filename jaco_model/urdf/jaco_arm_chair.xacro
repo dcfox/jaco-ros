@@ -128,7 +128,7 @@
       </geometry>
       <origin rpy="0 0 0" xyz="0.0 0 0.1"/>
       <material name="leather">
-        <color rgba="0.5 0.5 0.5 1"/>
+        <color rgba="0.25 0.5 0.25 1"/>
         <!--texture filename="package://jaco_description/urdf/leather.jpg" /-->
       </material>
     </visual>

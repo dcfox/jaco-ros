@@ -170,6 +170,6 @@
   <joint name="table_to_obstacle" type="fixed">
     <parent link="table"/>
     <child link="obstacle"/>
-    <origin xyz="-0.35 -0.1 0.5"/>
+    <origin xyz="-0.35 0 0.5"/>
   </joint>
 </root>

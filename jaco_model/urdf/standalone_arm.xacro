@@ -15,7 +15,7 @@
     xmlns:physics="http://playerstage.sourceforge.net/gazebo/xmlschema/#physics"
 	xmlns:xacro="http://ros.org/wiki/xacro" name="jaco">
 
-  <xacro:include filename="$(find jaco_model)/urdf/jaco_arm_table2.xacro" />
+  <xacro:include filename="$(find jaco_model)/urdf/jaco_arm_chair.xacro" />
 
 <link name="root">
       <visual>
