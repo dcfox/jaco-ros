@@ -6,11 +6,7 @@
   <arg name="sim_time" default="false" />
   <param name="/use_sim_time" value="$(arg sim_time)"/>
 
-  <!-- Non-standard joint names:
-       - Create a file jaco_ros_moveit/config/joint_names.yaml
-           controller_joint_names: [joint_1, joint_2, ... joint_N] 
-       - Update with joint names for your robot (in order expected by rbt controller)
-       - and uncomment the following line: -->
+  <!-- Non-standard joint names-->
   <rosparam command="load" file="$(find jaco_ros_moveit)/config/joint_names.yaml"/>
   
   <!-- the "sim" argument controls whether we connect to a Simulated or Real robot -->
@@ -43,8 +39,5 @@
   <include file="$(find jaco_ros_moveit)/launch/moveit_rviz.launch">
     <arg name="config" value="true"/>
   </include>
-  
-  <!-- If you use the MongoDB warehouse, uncomment the following line. -->
-  <!--include file="$(find jaco_ros_moveit)/launch/default_warehouse_db.launch" /-->
 
 </launch>

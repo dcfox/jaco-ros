@@ -26,6 +26,14 @@
         <joint name="jaco_joint_5" value="3.1415" />
         <joint name="jaco_joint_6" value="0" />
     </group_state>
+    <group_state name="eat" group="arm">
+        <joint name="jaco_joint_1" value="-0.8379" />
+        <joint name="jaco_joint_2" value="-1.9818" />
+        <joint name="jaco_joint_3" value="0.6523" />
+        <joint name="jaco_joint_4" value="-0.2814" />
+        <joint name="jaco_joint_5" value="0.9984" />
+        <joint name="jaco_joint_6" value="-1.0998" />
+    </group_state>
     <group_state name="hand_open" group="gripper">
         <joint name="jaco_joint_finger_1" value="0" />
         <joint name="jaco_joint_finger_2" value="0" />

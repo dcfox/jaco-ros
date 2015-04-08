@@ -35,7 +35,7 @@
 
   <property name="joint_base" value="jaco_joint_base" />
   <property name="joint_base_axis_xyz" value="0 0 0" />
-  <property name="joint_base_origin_xyz" value="0.15 0 0.55" />
+  <property name="joint_base_origin_xyz" value="0 0 0.55" />
   <property name="joint_base_origin_rpy" value="0 0 0" />
 
   <property name="joint_1" value="jaco_joint_1" />
@@ -119,7 +119,7 @@
   <joint name="jointarmtochair" type="fixed">
     <parent link="root"/>
     <child link="base_link"/>
-    <origin xyz="0 0.4 0.5" rpy="0 0 0" />
+    <origin xyz="0.4 0 0.5" rpy="0 0 ${-1*J_PI/2}" />
   </joint>
 <link name="base_link">
     <visual>

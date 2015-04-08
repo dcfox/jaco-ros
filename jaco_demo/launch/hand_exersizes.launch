@@ -1,0 +1,5 @@
+<launch>
+  <node name="close_hand" pkg="jaco_demo" type="close_hand.py">
+  </node>
+
+</launch>

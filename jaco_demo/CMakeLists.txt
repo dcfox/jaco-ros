@@ -56,5 +56,7 @@ install(PROGRAMS
   nodes/jaco_demo/grip_workout.py
   nodes/jaco_demo/joint_angle_workout.py
   nodes/jaco_demo/dan_workout.py
+  nodes/jaco_demo/close_hand.py
+  nodes/jaco_demo/open_hand.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
