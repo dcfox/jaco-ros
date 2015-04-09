@@ -28,3 +28,12 @@ Fingers mostly closed:
 
 Fingers closed:
 [57.75 57.75 59.75]
+
+
+'claw' orientation
+  orientation: 
+    x: 0.978398782865
+    y: 0.203091216798
+    z: -0.0162236010533
+    w: 0.0350224801514
+

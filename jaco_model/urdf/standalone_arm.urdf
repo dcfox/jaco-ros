@@ -5,14 +5,14 @@
 <!-- =================================================================================== -->
 <robot name="jaco" xmlns:body="http://playerstage.sourceforge.net/gazebo/xmlschema/#body" xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller" xmlns:gazebo="http://playerstage.sourceforge.net/gazebo/xmlschema/#gz" xmlns:geom="http://playerstage.sourceforge.net/gazebo/xmlschema/#geom" xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface" xmlns:joint="http://playerstage.sourceforge.net/gazebo/xmlschema/#joint" xmlns:model="http://playerstage.sourceforge.net/gazebo/xmlschema/#model" xmlns:physics="http://playerstage.sourceforge.net/gazebo/xmlschema/#physics" xmlns:renderable="http://playerstage.sourceforge.net/gazebo/xmlschema/#renderable" xmlns:rendering="http://playerstage.sourceforge.net/gazebo/xmlschema/#rendering" xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor" xmlns:xacro="http://ros.org/wiki/xacro" xmlns:xi="http://www.w3.org/2001/XInclude">
   <joint name="jointarmtochair" type="fixed">
-    <parent link="root"/>
+    <parent link="jaco_link_base"/>
     <child link="base_link"/>
-    <origin rpy="0 0 -1.57079632679" xyz="0.4 0 0.5"/>
+    <origin rpy="0 0 -1.57079632679" xyz="0.3 0.1778 0"/>
   </joint>
   <link name="base_link">
     <visual>
       <geometry>
-        <box size="0.53 0.52 0.1"/>
+        <box size="0.52 0.51 0.1"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0.0 0 0.1"/>
       <material name="leather">
@@ -71,7 +71,7 @@
   <joint name="base_link_to_arm_rest_right" type="fixed">
     <parent link="base_link"/>
     <child link="arm_rest_right"/>
-    <origin xyz="-0.06 0.24 0.25"/>
+    <origin xyz="-0.12 0.24 0.25"/>
   </joint>
   <link name="arm_rest_left">
     <visual>
@@ -85,7 +85,7 @@
   <joint name="base_link_to_arm_rest_left" type="fixed">
     <parent link="base_link"/>
     <child link="arm_rest_left"/>
-    <origin xyz="-0.06 -0.24 0.25"/>
+    <origin xyz="-0.12 -0.24 0.25"/>
   </joint>
   <link name="left_wheel">
     <visual>

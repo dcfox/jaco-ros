@@ -1,0 +1,5 @@
+<launch>
+   <arg name="robot" default="jaco"/>
+   <node name="full_test" pkg="jaco_demo" type="full_test.py">
+   </node>
+</launch>

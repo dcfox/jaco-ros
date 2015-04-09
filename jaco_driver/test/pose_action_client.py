@@ -11,7 +11,7 @@ import sys
 
 
 def pose_client():
-    client = actionlib.SimpleActionClient('/jaco/arm_pose', jaco_msgs.msg.ArmPoseAction)
+    client = actionlib.SimpleActionClient('/jaco_arm_driver/arm_pose/arm_pose', jaco_msgs.msg.ArmPoseAction)
 
     goal = jaco_msgs.msg.ArmPoseGoal()
 

@@ -117,14 +117,14 @@
     <xacro:jaco_finger_joint joint_name="${joint_finger_3}" type="revolute" parent="${link_hand}" child="${link_finger_3}" joint_axis_xyz="${joint_finger_3_axis_xyz}" joint_origin_xyz="${joint_finger_3_origin_xyz}" joint_origin_rpy="${joint_finger_3_origin_rpy}" lower_limit="${joint_finger_3_lower_limit}" upper_limit="${joint_finger_3_upper_limit}"/>
   </xacro:macro>
   <joint name="jointarmtochair" type="fixed">
-    <parent link="root"/>
+    <parent link="jaco_link_base"/>
     <child link="base_link"/>
-    <origin xyz="0.4 0 0.5" rpy="0 0 ${-1*J_PI/2}" />
+    <origin xyz="0.3 0.1778 0" rpy="0 0 ${-1*J_PI/2}" />
   </joint>
 <link name="base_link">
     <visual>
       <geometry>
-        <box size="0.53 0.52 0.1"/>
+        <box size="0.52 0.51 0.1"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0.0 0 0.1"/>
       <material name="leather">
@@ -184,7 +184,7 @@
   <joint name="base_link_to_arm_rest_right" type="fixed">
     <parent link="base_link"/>
     <child link="arm_rest_right"/>
-    <origin xyz="-0.06 0.24 0.25"/>
+    <origin xyz="-0.12 0.24 0.25"/>
   </joint>
  <link name="arm_rest_left">
     <visual>
@@ -198,7 +198,7 @@
   <joint name="base_link_to_arm_rest_left" type="fixed">
     <parent link="base_link"/>
     <child link="arm_rest_left"/>
-    <origin xyz="-0.06 -0.24 0.25"/>
+    <origin xyz="-0.12 -0.24 0.25"/>
   </joint>
   <!-- main driving wheels -->
   <link name="left_wheel">

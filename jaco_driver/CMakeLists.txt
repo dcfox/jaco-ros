@@ -90,6 +90,7 @@ install(PROGRAMS
   test/angle_action_client.py
   test/finger_action_client.py
   test/pose_action_client.py
+  test/pickup_action_client.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
