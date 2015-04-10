@@ -65,7 +65,7 @@ def gripper_client(finger_positions):
 #NOTE: Unfinished; TODO
 def callback(data):
     #rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
-    pose = data.data
+    pose = data.pose
     return pose
     
    #NOTE: Unfinished; TODO 
@@ -73,7 +73,7 @@ def listener():
 
     rospy.init_node('listener', anonymous=True)
 
-    rospy.Subscriber("object_position", geometry_msgs.msg.Pose(), callback)
+    rospy.Subscriber("object_position", geometry_msgs.msg.PoseStamped, callback)
 
     rospy.spin()
 	
@@ -82,16 +82,16 @@ def listener():
 	
 if __name__ == '__main__':
     try:
-		rospy.init_node('jaco' + '_full_test')
+	rospy.init_node('jaco' + '_full_test')
         
         raw_z_offset = [0.0.0.0 0.1, 0.0 0.0 0.0 0.0]
         z_offset = [(raw_z_offset[:3], raw_z_offset[3:])]
        
        #READ GOAL POSITION HERE
-       pose2 = listener() #ASSUMING FORMAT IS geometry_msg/pose
-       pose1 = pose2 + z_offset
+       pose1 = listener() #ASSUMING FORMAT IS geometry_msg/pose
+       #pose1 = pose2 + z_offset
        #NOTE: READ 2 POSITIONS: THE FIRST WITH A HIGHER Z VALUE
-       
+       poses = [ pose1 ]
         #Move above the goal and then to goal
         for pos, orient in poses:
             print('    position: {},  orientation: {}'.format(pos, orient))

@@ -52,7 +52,7 @@ def move():
 
 	robot = moveit_commander.RobotCommander()
 	scene = moveit_commander.PlanningSceneInterface()
-	group = moveit_commander.MoveGroupCommander("arm")
+	group = moveit_commander.MoveGroupCommander('arm')
 
 	display_trajectory_publisher = rospy.Publisher(
 		                    '/move_group/display_planned_path',
@@ -72,13 +72,11 @@ def move():
 	print robot.get_current_state()
 	print "============"
 
-	print "END PROGRAM"
-
 	pose_target = geometry_msgs.msg.Pose()
-	pose_target.orientation.w = 0.213
-	pose_target.position.x = 0.047
-	pose_target.position.y = -0.291
-	pose_target.position.z = 0.841
+	pose_target.orientation.w = -0.0184
+	pose_target.position.x = -0.0675
+	pose_target.position.y = -0.48689
+	pose_target.position.z = 0.4199
 	group.set_pose_target(pose_target)
 	
 	plan1 = group.plan()
@@ -95,31 +93,74 @@ def move():
 
 	print "============ Waiting while plan1 is visualized (again)..."
 	rospy.sleep(5)
-	
+
 	# Uncomment below line when working with a real robot
 	group.go(wait=True)
-	
-	
-	moveit_commander.roscpp_shutdown()
+
+	pose_target = geometry_msgs.msg.Pose()
+	pose_target.orientation.w = -0.0184
+	pose_target.position.x = -0.064
+	pose_target.position.y = -0.4956
+	pose_target.position.z = 0.3816
+	group.set_pose_target(pose_target)
+
+	plan2 = group.plan()
+
+	print "============ Visualizing plan2"
+	display_trajectory = moveit_msgs.msg.DisplayTrajectory()
+
+	display_trajectory.trajectory_start = robot.get_current_state()
+	display_trajectory.trajectory.append(plan2)
+	display_trajectory_publisher.publish(display_trajectory);
+
+	print "============ Waiting while plan2 is visualized (again)..."
+	rospy.sleep(5)
+
+	# Uncomment below line when working with a real robot
+	group.go(wait=True)
+
+	print "Preparing to close hand"
+	rospy.sleep(15)
+
+	#Finger positions by angle (0 to ~60), realistically (0.25 to 56)
+	print('Using the specified JACO finger positions:')
+	raw_positions = [55.0, 55.0, 55.0]
+	positions = [raw_positions]
+
+	#Close the fingers
+	for position in positions:
+		print ('position: {}'.format(position))
+		result = gripper_client(position)
+
+	pose_target = geometry_msgs.msg.Pose()
+	pose_target.orientation.w = 0.213
+	pose_target.position.x = 0.047
+	pose_target.position.y = -0.291
+	pose_target.position.z = 0.841
+	group.set_pose_target(pose_target)
+
+	plan3 = group.plan()
+
+	print "============ Waiting while RVIZ displays plan1..."
+	rospy.sleep(5)
+
+	print "============ Visualizing plan3"
+	display_trajectory = moveit_msgs.msg.DisplayTrajectory()
+
+	display_trajectory.trajectory_start = robot.get_current_state()
+	display_trajectory.trajectory.append(plan3)
+	display_trajectory_publisher.publish(display_trajectory);
+
+	print "============ Waiting while plan3 is visualized (again)..."
+	rospy.sleep(5)
+
+	# Uncomment below line when working with a real robot
+	group.go(wait=True)
+
+
+	#moveit_commander.roscpp_shutdown()
 	
 if __name__=='__main__':
-    try:
+        #Moves above the target, and then to the target
         move()
-        print "Preparing to close hand"
-        rospy.sleep(15)
-
-        #Finger positions by angle (0 to ~60), realistically (0.25 to 56)
-        print('Using the specified JACO finger positions:')
-        raw_positions = [55.0, 55.0, 55.0]
-        positions = [raw_positions]
-
-        #Close the fingers
-        for position in positions:
-            print('    position: {}'.format(position))
-            result = gripper_client(position)
-
-
-
-    except rospy.ROSINterruptException:
-        print "ERROR ERROR ERROR"
-        pass
+        

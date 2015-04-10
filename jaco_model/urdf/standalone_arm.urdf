@@ -16,8 +16,7 @@
       </geometry>
       <origin rpy="0 0 0" xyz="0.0 0 0.1"/>
       <material name="leather">
-        <color rgba="0.25 0.5 0.25 1"/>
-        <!--texture filename="package://jaco_description/urdf/leather.jpg" /-->
+        <color rgba="0.466667 0.533333 0.6 1"/>
       </material>
     </visual>
     <collision>
@@ -104,7 +103,7 @@
       <origin rpy="1.57075 0 0" xyz="0.0 0.0 0.0"/>
     </collision>
   </link>
-  <joint name="base_link_to_left_wheel" type="continuous">
+  <joint name="base_link_to_left_wheel" type="fixed">
     <parent link="base_link"/>
     <child link="left_wheel"/>
     <origin xyz="0.05 0.3 -0.3"/>
@@ -125,7 +124,7 @@
       <origin rpy="1.57075 0 0" xyz="0.0 0.0 0.0"/>
     </collision>
   </link>
-  <joint name="base_link_to_right_wheel" type="continuous">
+  <joint name="base_link_to_right_wheel" type="fixed">
     <parent link="base_link"/>
     <child link="right_wheel"/>
     <origin xyz="0.05 -0.3 -0.3"/>
@@ -173,6 +172,22 @@
     <child link="foot_plate"/>
     <origin xyz="0.47 0 -0.3"/>
   </joint>
+  <link name="table_top">
+    <visual>
+      <geometry>
+        <box size="1.8288 0.6096 0.03175"/>
+      </geometry>
+      <!--origin rpy="0 0 0" xyz="-0.5 0 0.3"/-->
+      <material name="wood">
+        <color rgba="0.627451 0.321569 0.176471 1"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="table_to_arm" type="fixed">
+    <parent link="jaco_link_base"/>
+    <child link="table_top"/>
+    <origin rpy="0 0 0" xyz="0.2794 -0.4826 0.2667"/>
+  </joint>
   <link name="root">
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
@@ -210,7 +225,7 @@
     <child link="jaco_link_base"/>
     <axis xyz="0 0 0"/>
     <limit effort="30" lower="0" upper="0" velocity="0.35"/>
-    <origin rpy="0 0 0" xyz="0 0 0.55"/>
+    <origin rpy="0 0 0" xyz="0 0 0.4826"/>
   </joint>
   <link name="jaco_link_1">
     <visual>
