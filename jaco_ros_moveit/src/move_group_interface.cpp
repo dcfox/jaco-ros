@@ -5,6 +5,8 @@
 #include <moveit_msgs/DisplayRobotState.h>
 #include <moveit_msgs/DisplayTrajectory.h>
 
+#include <moveit_msgs/CollisionObject.h>
+
 #include "ros/ros.h"
 
 
@@ -91,8 +93,48 @@ void callBack(const geometry_msgs::PoseStamped &obj_pose)
     //move to eat position
     //TODO
     
+    /*This is an experiment born of sleep deprivation
+     * Only uncomment this code is you are feeling lucky
+     * */
+     /*
+    moveit_msgs::CollisionObject collision_object;
+    collision_object.header.frame_id = group.getPlanningFrame();
+    
+    //create object
+    collision_object.id = "baller";
+    shape_msgs::SolidPrimitive baller;
+    baller.type = baller.SPHERE;
+    baller.dimensions[0]=0.02; //random size guess
+    
+    //place object
+    geometry_msgs::Pose baller_pose;
+    baller_pose.position.x= obj_pose.pose.position.x;
+    baller_pose.position.y= obj_pose.pose.position.y;
+    baller_pose.position.z= obj_pose.pose.position.z;
+    
+    //actually place object
+    collision_object.primitives.push_back(baller);
+    collision_object.primitive_poses.push_back(baller_pose);
+    collision_object.operation = collision_object.ADD;
+    
+    std::vector<moveit_msgs::CollisionObject> collision_objects;  
+    collision_objects.push_back(collision_object);  
+
+    // Now, let's add the collision object into the world
+    ROS_INFO("Add an object into the world");  
+    planning_scene_interface.addCollisionObjects(collision_objects);
+  
+    // Sleep so we have time to see the object in RViz
+    sleep(2.0);
+    
+    //Note: this code is unfinished until I can see the moveit tutorial
+    //for pick & place. moveit.ros.org picked the worst week to go down
+    
+    */
+    
     
     ros::shutdown(); 
+     
 }
 
 int main (int argc, char **argv)
