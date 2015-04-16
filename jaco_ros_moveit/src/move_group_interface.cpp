@@ -27,20 +27,17 @@ void callBack(const geometry_msgs::PoseStamped &obj_pose)
 
     ROS_INFO("Reference frame: %s", group.getEndEffectorLink().c_str());
     
-    geometry_msgs::Pose target_pose1, target_pose2;
+    geometry_msgs::Pose target_pose1;
     
-    //set pose 2 equal to object location
-    target_pose2.position.x= obj_pose.pose.position.x;
-    target_pose2.position.y= obj_pose.pose.position.y;
-    target_pose2.position.z= obj_pose.pose.position.z;
-    target_pose2.orientation.x= obj_pose.pose.orientation.x;
-    target_pose2.orientation.y= obj_pose.pose.orientation.y;
-    target_pose2.orientation.z= obj_pose.pose.orientation.z;
-    target_pose2.orientation.w= obj_pose.pose.orientation.w;
+    //set pose 1 equal to object location
+    target_pose1.position.x= obj_pose.pose.position.x;
+    target_pose1.position.y= obj_pose.pose.position.y;
+    target_pose1.position.z= obj_pose.pose.position.z;
+    target_pose1.orientation.x= obj_pose.pose.orientation.x;
+    target_pose1.orientation.y= obj_pose.pose.orientation.y;
+    target_pose1.orientation.z= obj_pose.pose.orientation.z;
+    target_pose1.orientation.w= obj_pose.pose.orientation.w;
     
-    //set pose 1 equal to object location +10cm in z
-    target_pose1 = target_pose2;
-    target_pose1.position.z += 0.2;
         
     // pose 1
     /* Use this pose for testing
@@ -53,7 +50,7 @@ void callBack(const geometry_msgs::PoseStamped &obj_pose)
     target_pose2.orientation.w= 0.068190;
     */
     
-    //Note: this approx converts cartesian point to angulat control
+    //Note: this approx converts cartesian point to angular control
     //May want to try ans replace this with
     //group.setJointvalueTarget(target_pose1);
     group.setApproximateJointValueTarget(target_pose1);
@@ -74,21 +71,9 @@ void callBack(const geometry_msgs::PoseStamped &obj_pose)
     // Actually moves real arm
     group.move();
     
-    
-    // Second movement
-    group.setApproximateJointValueTarget(target_pose1);
-    group.setGoalPositionTolerance(0.001);
-    group.setGoalOrientationTolerance(.1);
-    moveit::planning_interface::MoveGroup::Plan my_plan2;
-    bool success2 = group.plan(my_plan2);
-    ROS_INFO("Visualizing plan 2 (pose goal) %s",success2?"":"FAILED");
-    sleep(5.0);
-    group.move();
-    
-    
     //close hand
     //please let this work
-    system("rosrun jaco_demo close_hand.py");
+    //system("rosrun jaco_demo close_hand.py");
     
     //move to eat position
     //TODO
