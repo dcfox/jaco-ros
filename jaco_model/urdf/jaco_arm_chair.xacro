@@ -35,7 +35,7 @@
 
   <property name="joint_base" value="jaco_joint_base" />
   <property name="joint_base_axis_xyz" value="0 0 0" />
-  <property name="joint_base_origin_xyz" value="0 0 0.4826" />
+  <property name="joint_base_origin_xyz" value="0 0 0" />
   <property name="joint_base_origin_rpy" value="0 0 0" />
 
   <property name="joint_1" value="jaco_joint_1" />

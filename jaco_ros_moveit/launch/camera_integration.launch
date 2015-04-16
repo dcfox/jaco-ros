@@ -1,0 +1,10 @@
+<launch>
+
+  <include file="$(find jaco_ros_moveit)/launch/moveit_planning_execution.launch"/>
+
+  <node name="move_group_interface" pkg="jaco_ros_moveit" type="move_group_interface"
+    respawn="false" output="screen">
+    <remap from="/joint_states" to="/jaco_arm_driver/out/joint_state" />
+  </node>
+
+</launch>

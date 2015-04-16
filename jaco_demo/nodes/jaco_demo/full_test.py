@@ -62,58 +62,33 @@ def gripper_client(finger_positions):
         print('        the gripper action timed-out')
         return None
 
-#NOTE: Unfinished; TODO
+#NOTE: Unfinished;
 def callback(data):
     #rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
-    pose = data.pose
-    return pose
+    #NOTE: The Pose does not include a Quaternion, only a point
+    pos = [data.pose.position.x, data.pose.position.y, data.pose.position.z]
+    #NOTE: This can be changed in the future
+    orient = [0.732062321466, 0.0569922916504, -0.0673723200983, 0.675498043422]
     
-   #NOTE: Unfinished; TODO 
-def listener():
+    print('    position: {},  orientation: {}'.format(pos, orient))
+    result = cartesian_pose_client(pos, orient)  
+           
+    #Finger positions by angle (0 to ~60), realistically (0.25 to 56)
+    print('Using the specified JACO finger positions:')
+    raw_positions = [55, 55, 55]
+    positions = [ raw_positions ]
 
-    rospy.init_node('listener', anonymous=True)
+    #Close the fingers
+    for position in positions:
+        print('    position: {}'.format(position))
+        result = gripper_client(position)
+        
+    poses = goal_generators.poses_from_file('/home/sd/ws/src/jaco-ros/homePos.txt')   
 
-    rospy.Subscriber("object_position", geometry_msgs.msg.PoseStamped, callback)
 
-    rospy.spin()
-	
-	
-	
-	
 if __name__ == '__main__':
-    try:
-	rospy.init_node('jaco' + '_full_test')
-        
-        raw_z_offset = [0.0.0.0 0.1, 0.0 0.0 0.0 0.0]
-        z_offset = [(raw_z_offset[:3], raw_z_offset[3:])]
-       
-       #READ GOAL POSITION HERE
-       pose1 = listener() #ASSUMING FORMAT IS geometry_msg/pose
-       #pose1 = pose2 + z_offset
-       #NOTE: READ 2 POSITIONS: THE FIRST WITH A HIGHER Z VALUE
-       poses = [ pose1 ]
-        #Move above the goal and then to goal
-        for pos, orient in poses:
-            print('    position: {},  orientation: {}'.format(pos, orient))
-            result = cartesian_pose_client(pos, orient)  
-            
-       	#Finger positions by angle (0 to ~60), realistically (0.25 to 56)
-        print('Using the specified JACO finger positions:')
-        raw_positions = [55 55 55]
-		positions = [ raw_positions ]
-
-		#Close the fingers
-        for position in positions:
-            print('    position: {}'.format(position))
-            result = gripper_client(position)
-
-		#Cartesian points chosen from file homePos.txt
-        print('Using poses from file: home/dan/catkin_ws/src/jaco-ros/homePos.txt')
-        #NOTE: THIS FILE LOCATION WILL CHANGE ON DIFFERENT COMPUTERS TODO
-        poses = goal_generators.poses_from_file('/home/dan/catkin_ws/src/jaco-ros/homePos.txt')         
-       
-        
-     except rospy.ROSInterruptException:
-        print "program interrupted before completion"
-        
+    
+    rospy.init_node('jaco' + '_full_test')
+    rospy.Subscriber("/object_position", geometry_msgs.msg.PoseStamped, callback)
+    rospy.spin()
         
