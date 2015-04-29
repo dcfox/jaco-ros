@@ -82,6 +82,8 @@ void JacoFingersActionServer::actionCallback(const jaco_msgs::SetFingersPosition
                  "should be set to zero or you make experience delays in action results.");
     }
 
+    //arm_comm_.jaco_api_.eraseAllTrajectories(); //sd1074
+    
     jaco_msgs::SetFingersPositionFeedback feedback;
     jaco_msgs::SetFingersPositionResult result;
     FingerAngles current_finger_positions;
@@ -103,7 +105,8 @@ void JacoFingersActionServer::actionCallback(const jaco_msgs::SetFingersPosition
         last_nonstall_finger_positions_ = current_finger_positions;
 
         FingerAngles target(goal->fingers);
-        arm_comm_.setFingerPositions(target);
+        //arm_comm_.setFingerPositions(target); //original 
+        arm_comm_.setFingerPositions(target, 10000, true); //sd1074
 
         // Loop until the action completed, is preempted, or fails in some way.
         // timeout is left to the caller since the timeout may greatly depend on
@@ -114,6 +117,7 @@ void JacoFingersActionServer::actionCallback(const jaco_msgs::SetFingersPosition
 
             if (action_server_.isPreemptRequested() || !ros::ok())
             {
+                ROS_WARN("============1");
                 result.fingers = current_finger_positions.constructFingersMsg();
                 arm_comm_.stopAPI();
                 arm_comm_.startAPI();
@@ -122,11 +126,13 @@ void JacoFingersActionServer::actionCallback(const jaco_msgs::SetFingersPosition
             }
             else if (arm_comm_.isStopped())
             {
+                ROS_WARN("============2");
                 result.fingers = current_finger_positions.constructFingersMsg();
                 action_server_.setAborted(result);
                 return;
             }
 
+            ROS_WARN("============3");
             arm_comm_.getFingerPositions(current_finger_positions);
             current_time = ros::Time::now();
             feedback.fingers = current_finger_positions.constructFingersMsg();
@@ -134,6 +140,7 @@ void JacoFingersActionServer::actionCallback(const jaco_msgs::SetFingersPosition
 
             if (target.isCloseToOther(current_finger_positions, tolerance_))
             {
+                    ROS_WARN("============4");
                 // Check if the action has succeeeded
                 result.fingers = current_finger_positions.constructFingersMsg();
                 action_server_.setSucceeded(result);
@@ -141,12 +148,14 @@ void JacoFingersActionServer::actionCallback(const jaco_msgs::SetFingersPosition
             }
             else if (!last_nonstall_finger_positions_.isCloseToOther(current_finger_positions, stall_threshold_))
             {
+                ROS_WARN("============5");
                 // Check if we are outside of a potential stall condition
                 last_nonstall_time_ = current_time;
                 last_nonstall_finger_positions_ = current_finger_positions;
             }
             else if ((current_time - last_nonstall_time_).toSec() > stall_interval_seconds_)
             {
+                ROS_WARN("============6");
                 // Check if the full stall condition has been meet
                 result.fingers = current_finger_positions.constructFingersMsg();
                 arm_comm_.stopAPI();

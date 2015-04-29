@@ -34,6 +34,7 @@
 
   <include file="$(find jaco_ros_moveit)/launch/move_group.launch">
     <arg name="publish_monitored_planning_scene" value="true" />
+    <!--remap from="/joint_states" to="/jaco_arm_driver/out/joint_state" /> <!- - sd -->
   </include>
 
   <include file="$(find jaco_ros_moveit)/launch/moveit_rviz.launch">
